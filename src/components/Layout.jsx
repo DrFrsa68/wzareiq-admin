@@ -1,67 +1,86 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { clearAuth, getUser } from '../store/auth';
+import { useState } from 'react';
 
 const links = [
   { path: '/', label: 'الرئيسية', icon: '📊' },
-  { path: '/subjects', label: 'المواد', icon: '📚' },
-  { path: '/exams', label: 'الامتحانات', icon: '📝' },
-  { path: '/students', label: 'الطلاب', icon: '👥' },
-];
+    { path: '/subjects', label: 'المواد', icon: '📚' },
+      { path: '/exams', label: 'الامتحانات', icon: '📝' },
+        { path: '/students', label: 'الطلاب', icon: '👥' },
+        ];
 
-export default function Layout({ children }) {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const user = getUser();
+        export default function Layout({ children }) {
+          const location = useLocation();
+            const navigate = useNavigate();
+              const user = getUser();
+                const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    clearAuth();
-    navigate('/login');
-  };
+                  const handleLogout = () => {
+                      clearAuth();
+                          navigate('/login');
+                            };
 
-  return (
-    <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-primary text-white flex flex-col fixed h-full">
-        <div className="p-6 border-b border-white/20">
-          <h1 className="text-2xl font-bold">صواب</h1>
-          <p className="text-white/60 text-sm mt-1">لوحة الإدارة</p>
-        </div>
+                              return (
+                                  <div className="min-h-screen bg-gray-50" dir="rtl">
+                                        {/* Top bar mobile */}
+                                              <div className="lg:hidden bg-primary text-white px-4 py-3 flex justify-between items-center">
+                                                      <button onClick={() => setOpen(!open)} className="text-2xl">☰</button>
+                                                              <h1 className="text-xl font-bold">صواب — الإدارة</h1>
+                                                                    </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {links.map(link => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
-                location.pathname === link.path
-                  ? 'bg-white/20 font-bold'
-                  : 'hover:bg-white/10'
-              }`}
-            >
-              <span>{link.icon}</span>
-              <span>{link.label}</span>
-            </Link>
-          ))}
-        </nav>
+                                                                          <div className="flex">
+                                                                                  {/* Sidebar */}
+                                                                                          <div className={`
+                                                                                                    fixed lg:static inset-y-0 right-0 z-50
+                                                                                                              w-64 bg-primary text-white flex flex-col
+                                                                                                                        transform transition-transform duration-200
+                                                                                                                                  ${open ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+                                                                                                                                          `}>
+                                                                                                                                                    <div className="p-6 border-b border-white/20 hidden lg:block">
+                                                                                                                                                                <h1 className="text-2xl font-bold">صواب</h1>
+                                                                                                                                                                            <p className="text-white/60 text-sm mt-1">لوحة الإدارة</p>
+                                                                                                                                                                                      </div>
 
-        <div className="p-4 border-t border-white/20">
-          <div className="mb-3 px-4">
-            <p className="font-bold">{user?.name}</p>
-            <p className="text-white/60 text-sm">@{user?.username}</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full bg-white/10 hover:bg-white/20 text-white rounded-xl px-4 py-2 transition"
-          >
-            تسجيل الخروج
-          </button>
-        </div>
-      </div>
+                                                                                                                                                                                                <nav className="flex-1 p-4 space-y-1 mt-4 lg:mt-0">
+                                                                                                                                                                                                            {links.map(link => (
+                                                                                                                                                                                                                          <Link
+                                                                                                                                                                                                                                          key={link.path}
+                                                                                                                                                                                                                                                          to={link.path}
+                                                                                                                                                                                                                                                                          onClick={() => setOpen(false)}
+                                                                                                                                                                                                                                                                                          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                                                                                                                                                                                                                                                                                                            location.pathname === link.path
+                                                                                                                                                                                                                                                                                                                                ? 'bg-white/20 font-bold'
+                                                                                                                                                                                                                                                                                                                                                    : 'hover:bg-white/10'
+                                                                                                                                                                                                                                                                                                                                                                    }`}
+                                                                                                                                                                                                                                                                                                                                                                                  >
+                                                                                                                                                                                                                                                                                                                                                                                                  <span>{link.icon}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                  <span>{link.label}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                </Link>
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ))}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                      </nav>
 
-      {/* Main */}
-      <div className="flex-1 mr-64 p-8">
-        {children}
-      </div>
-    </div>
-  );
-}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div className="p-4 border-t border-white/20">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div className="mb-3 px-4">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <p className="font-bold">{user?.name}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p className="text-white/60 text-sm">@{user?.username}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <button
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              onClick={handleLogout}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            className="w-full bg-white/10 hover:bg-white/20 text-white rounded-xl px-4 py-2 transition"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      تسجيل الخروج
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {/* Overlay */}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {open && <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setOpen(false)} />}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {/* Main */}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div className="flex-1 p-4 lg:p-8 min-h-screen">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {children}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  );
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
